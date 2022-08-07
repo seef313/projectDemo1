@@ -5,9 +5,9 @@ A little bit of programming
     2. Command-line flag for the listening port (defaults to 8080) and environment variable override. 3. Use mostly standard libraries. - Flask can make this easy as well 
     4. Please provide a Makefile (or use a similar tool) to define tasks 
     5. Three HTTP endpoints: 
-        /helloworld 
-            --> returns "Hello Stranger" 
-        /helloworld?name=AlfredENeumann (any filtered value) 
+        /helloworld                     -x 
+            --> returns "Hello Stranger"                    -x 
+        /helloworld?name=AlfredENeumann (any filtered value) #need to set up html page to track name field
             --> returns "Hello Alfred E Neumann" (camel-case gets cut by spaces) 
         /versionz      #which libraries to use?                                                                          
             --> returns a JSON with git hash and name of the project (needs to be compiled in) #json library with helpful function? 
@@ -37,7 +37,10 @@ def helloWorld():
     return "Hello Stranger" 
 
 
-
+# @app.route("/helloworld/<name>", methods=["GET", "POST"])
+# def helloWorldName(name):
+#     return (request.args.get('name'))
+ 
 
 if __name__ == "__main__":
     app.run(port=3000)
