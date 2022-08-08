@@ -7,7 +7,7 @@ A little bit of programming
     5. Three HTTP endpoints: 
         /helloworld                     -x 
             --> returns "Hello Stranger"                    -x 
-        /helloworld?name=AlfredENeumann (any filtered value) #need to set up html page to track name field
+        /helloworld?name=AlfredENeumann (any filtered value) 
             --> returns "Hello Alfred E Neumann" (camel-case gets cut by spaces) 
         /versionz      #which libraries to use?                                                                          
             --> returns a JSON with git hash and name of the project (needs to be compiled in) #json library with helpful function? 
@@ -34,13 +34,16 @@ app.config["DEBUG"] = True
 @app.route("/") #setting default landing to hello world 
 @app.route("/helloworld", methods=["GET", "POST"])
 def helloWorld():
-    return "Hello Stranger" 
+    if request.args:
+        args = request.args 
+    print( ''.join(' ' + c if c.isupper() else c for c in args.get("name"))) #to turn camel caase into space)
+    return ("Hello Stranger" ) #this accomplishes task of /helloworld endpoint (5a) 
+    #return (args.get("name")) #returns the name from query field 
 
 
-# @app.route("/helloworld/<name>", methods=["GET", "POST"])
-# def helloWorldName(name):
-#     return (request.args.get('name'))
- 
+
+#?name=AlfredENeumann
+
 
 if __name__ == "__main__":
-    app.run(port=3000)``
+    app.run(port=3000)
