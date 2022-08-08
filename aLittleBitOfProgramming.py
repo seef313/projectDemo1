@@ -7,7 +7,7 @@ A little bit of programming
     5. Three HTTP endpoints: 
         /helloworld                     -x 
             --> returns "Hello Stranger"                    -x 
-        /helloworld?name=AlfredENeumann (any filtered value) 
+        /helloworld?name=AlfredENeumann (any filtered value) <= wasnt sure if this qualifies as a serprate endpoint 
             --> returns "Hello Alfred E Neumann" (camel-case gets cut by spaces) 
         /versionz      #which libraries to use?                                                                          
             --> returns a JSON with git hash and name of the project (needs to be compiled in) #json library with helpful function? 
@@ -21,7 +21,7 @@ A little bit of programming
        container. 
     10. Documentation where it makes sense.
 """
-
+import subprocess, git, json 
 from flask import Flask, redirect, url_for, render_template, request
 
 
@@ -36,13 +36,31 @@ app.config["DEBUG"] = True
 def helloWorld():
     if request.args:
         args = request.args 
-    print( ''.join(' ' + c if c.isupper() else c for c in args.get("name"))) #to turn camel caase into space)
+        print( ''.join(' ' + c if c.isupper() else c for c in args.get("name"))) #to turn camel caase into space)
     return ("Hello Stranger" ) #this accomplishes task of /helloworld endpoint (5a) 
     #return (args.get("name")) #returns the name from query field 
 
-
-
 #?name=AlfredENeumann
+
+#function to get git hash 
+def get_git_revision_short_hash() -> str:
+    return subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).decode('ascii').strip()
+
+@app.route("/versionz", methods=["GET", "POST"])
+def versionz():
+    repo = git.Repo(search_parent_directories=True)
+    sha = repo.head.object.hexsha
+    name =  repo.remotes.origin.url.split('.git')[0].split('/')[-1]
+    #5c 
+    load = {
+        "Project": name , 
+        "Hash" : sha  
+    }
+    return(load)
+
+    
+
+
 
 
 if __name__ == "__main__":
