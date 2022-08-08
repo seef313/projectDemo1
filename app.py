@@ -28,17 +28,18 @@ from flask import Flask, redirect, url_for, render_template, request
 # Flask
 app = Flask(__name__)
 app.config["DEBUG"] = True
+# to run on different port  flask run --port=
 
-
-# helloworld 
 @app.route("/") #setting default landing to hello world 
 @app.route("/helloworld", methods=["GET", "POST"])
 def helloWorld():
     if request.args:
         args = request.args 
-        print( ''.join(' ' + c if c.isupper() else c for c in args.get("name"))) #to turn camel caase into space)
+        return ( ''.join(' ' + c if c.isupper() else c for c in args.get("name"))) #to turn camel caase into space)
+    print(aLog())
     return ("Hello Stranger" ) #this accomplishes task of /helloworld endpoint (5a) 
     #return (args.get("name")) #returns the name from query field 
+    aLog()
 
 #?name=AlfredENeumann
 
@@ -56,9 +57,12 @@ def versionz():
         "Project": name , 
         "Hash" : sha  
     }
+    print(aLog())
     return(load)
 
-
+# we can do a lot more with this functionality using python logging feeature. But, since no further context 
+# was provided about the context based on which the logs should be generated I will just include a basic approach of 
+# how to structure it 
 # def aLog(): 
 #     log = (
 #         logging.info(datetime.now().isoformat())
@@ -66,19 +70,24 @@ def versionz():
 #         logging.info()
 #     )
 
-    
 def aLog(): 
-    log =  [
+    log =  json.dumps(
+        
         {
-            "ISOdate" : datetime.now().isoformat(),
-            "HTTPstatus" : None,
-            "Request":None
+            'ISOdate' : datetime.datetime.now().isoformat(),
+            'HTTPstatus' : 200,
+            'Request': request.method
         }
-    ]
     
+    )
+    return(log)    
 
 
 
 
 if __name__ == "__main__":
-    app.run(port=3000)
+    with app.app_context():
+        app.run(port=3000)
+        
+    #app.run(port=3000)
+   
