@@ -1,5 +1,7 @@
 # projectDemo1
 
-To run: use flask run 
+To run: 
+flask run 
 
-Test: flask test 
+To Test: 
+flask test 
